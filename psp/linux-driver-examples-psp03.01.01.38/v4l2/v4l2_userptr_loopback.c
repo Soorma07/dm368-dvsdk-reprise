@@ -157,7 +157,7 @@
 #endif
 
 #define CLEAR(x)	memset (&(x), 0, sizeof (x))
-static int en_capture_to_file;
+static int en_capture_to_file = 0;
 int num_frame_to_capture = 100;
 #define FILE_CAPTURE "./output.yuv"
 FILE *fp_capture;
@@ -1278,7 +1278,7 @@ void menu(void)
 int main(int argc, char *argv[])
 {
 	int ret = 0, d, index;
-	char shortoptions[] = "i:s:p:m:f:l:h:b:t:c:?";
+	char shortoptions[] = "i:s:p:m:f:g:l:h:b:t:c:?";
 
 	DBGENTER;
 
@@ -1290,6 +1290,10 @@ int main(int argc, char *argv[])
 		switch (d) {
 		case 'f':
 			field = atoi(optarg);
+			break;
+		case 'g':
+			num_frame_to_capture = atoi(optarg);
+			en_capture_to_file = 1;
 			break;
 		case 'i':
 			vpfe_input = atoi(optarg);

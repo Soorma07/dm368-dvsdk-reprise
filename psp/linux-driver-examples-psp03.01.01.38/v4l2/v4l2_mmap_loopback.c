@@ -193,6 +193,9 @@ static int input_std;
 static int field;
 char *inputs[] = { "COMPOSITE", "SVIDEO", "COMPONENT" };
 
+#define FILE_CAPTURE "./output.yuv"
+FILE *fp_capture;
+
 /*******************************************************************************
  *	EXTERN VARIABLES
  */
@@ -413,6 +416,19 @@ static int start_loop(void)
 			memcpy(dest, src, disppitch);
 			src += disppitch;
 			dest += disppitch;
+		}
+
+#define WWARE 1
+		if (WWARE) {
+			int file_size = disppitch * dispheight;
+			int num_frame_to_capture = 10;
+			if (captFrmCnt == num_frame_to_capture) {
+				printf("Writing frame %d to file %s, size = %d\n",num_frame_to_capture,
+					 FILE_CAPTURE, file_size);
+				fwrite(buffers[buf.index].start, 1, file_size, fp_capture);
+				printf("Writing file %s complete\n", FILE_CAPTURE);
+				fclose(fp_capture);
+			}
 		}
 
 		ret = put_display_buffer(fd_vid1, displaybuffer);
@@ -1364,6 +1380,13 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	if (WWARE) {
+		fp_capture = fopen(FILE_CAPTURE, "wb");
+		if (fp_capture == NULL) {
+			printf("Unable to open file %s for capture\n", FILE_CAPTURE);
+			exit(1);
+		}
+	}
 	ret = vpbe_UE_1();
 	DBGEXIT;
 	return ret;

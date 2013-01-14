@@ -189,6 +189,10 @@ execute "mkdir -p /tmp/sdk/$$"
 execute "mount ${device}2 /tmp/sdk/$$"
 execute "tar zxf $sdkdir/filesystem/dvsdk-dm368-evm-rootfs.tar.gz -C /tmp/sdk/$$"
 
+# Here is where to make my own mods if I want
+execute "cp $sdkdir/psp/linux-driver-examples-psp03.01.01.38/v4l2/v4l2_mmap_loopback -C /tmp/sdk/$$/home/root"
+execute "cp $sdkdir/psp/linux-driver-examples-psp03.01.01.38/v4l2/v4l2_userptr_loopback -C /tmp/sdk/$$/home/root"
+
 # check if we need to create symbolic link for matrix 
 echo -n "Creating matrix-gui-e symbolic link..."
 if [ -f /tmp/sdk/$$/etc/init.d/matrix-gui-e ]; then
